@@ -21,10 +21,7 @@ const ProductsSchema = new Schema({
       type: Number,
       required: true
     },
-    image: {
-      type: String,
-      required: true
-    },
+  
     category: {
       type: String,
       required: true
