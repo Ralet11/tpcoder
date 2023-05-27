@@ -13,6 +13,7 @@ export const getAllProducts = async (req, res) => {
 export const createProduct = async (req, res) => {
     const { name, price, category, id } = req.body;
     console.log({ name, price, category, id})
+    const _product = { name, price, category, id }
     if (!id || !name || !price || !category) {
      return res.status(400).json({ message: "Bad request", data: null });
    }
@@ -30,3 +31,31 @@ export const createProduct = async (req, res) => {
   }
 
   };
+
+  export const deleteProduct = async (req, res) => {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ message: "Bad request", data: null });
+    }
+    try {
+      const deletedProduct = await Products.findOneAndDelete({ id: id });
+      if (!deletedProduct) {
+        return res.status(404).json({ message: 'Product not found' });
+      }
+      return res.json({ message: 'Product deleted successfully' });
+    } catch (error) {
+      return res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+  };
+
+  export const updateProduct = async (req, res) => {
+    const { name, price, category, id } = req.params;
+    if (!id) {
+      return res.status(400).json({ message: "Bad request", data: null });
+    }
+
+  const upProduct = Products.findByIdAndUpdate({id: id})
+  
+
+
+  }
