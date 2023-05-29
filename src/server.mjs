@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
-import productsRouter from "./routes/rutas.js";
+import cartRouter from "./routes/cart.router.js"
+import productsRouter from "./routes/product.router.js";
 
 
 const app = express();
@@ -22,6 +23,7 @@ mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
 
 app.use(express.json())
 app.use("/api/products", productsRouter);
+app.use("/api", cartRouter);
 
 
 

@@ -1,5 +1,5 @@
-import { Repository } from "./repository.js";
-import { ProductDAOMongo } from "../Modules/products.dao.mongo.js";
+import { Repository } from "../repository.js";
+import { ProductDAOMongo } from "./products.dao.mongo.js";
 
 export class ProductRepository extends Repository {
   constructor(ProductDao = new ProductDAOMongo()) {
@@ -28,7 +28,7 @@ export class ProductRepository extends Repository {
   }
 
   async update(id, product) {
-    const _product = await this.ProductDao.UpdateProduct(id, product);
+    const _product = await this.ProductDao.updateProduct(id, product);
     return _product;
   }
 }
