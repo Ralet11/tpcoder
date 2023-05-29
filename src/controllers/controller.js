@@ -1,61 +1,56 @@
-import { Products, ProductDTO } from "../Schema/schema.js";
+import { ProductRepository } from "./../Modules/productsRepository.js";
 
-export const getproductById = async (req,res) => {
-    const { id } = req.params;
-    const product = await Products.findById(id)
-    res.json({data: product})
-}
+const ProductDao = new ProductRepository
+
+export const getProductById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const product = await ProductDao.findOne(id);
+    res.json({ data: product });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+};
 
 export const getAllProducts = async (req, res) => {
-    const products = await Products.find()
-}
+  try {
+    const products = await ProductDao.find();
+    res.json({ data: products });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+};
 
 export const createProduct = async (req, res) => {
-    const { name, price, category, id } = req.body;
-    console.log({ name, price, category, id})
-    const _product = { name, price, category, id }
-    if (!id || !name || !price || !category) {
-     return res.status(400).json({ message: "Bad request", data: null });
-   }
-   const existe = await Products.findOne({id});
-   if (existe) {
-     return res.status(409).json({ message: "Product already exists", data: null });
-   }
+  const { name, price, category, id } = req.body;
+  const product = { name, price, category, id };
 
-   const product = new Products(_product);
+  if (!id || !name || !price || !category) {
+    return res.status(400).json({ message: "Bad request", data: null });
+  }
+
   try {
-    const savedProduct = await product.save();
-    return res.status(201).json({ data: savedProduct, message: "Product has been created" });
+    const newProduct = await ProductDao.save(product);
+    res.status(201).json({ data: newProduct, message: "Product has been created" });
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error", error: error.message });
+    res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+};
+
+export const deleteProduct = async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    return res.status(400).json({ message: "Bad request", data: null });
   }
 
-  };
-
-  export const deleteProduct = async (req, res) => {
-    const { id } = req.params;
-    if (!id) {
-      return res.status(400).json({ message: "Bad request", data: null });
+  try {
+    const result = await ProductDao.delete(id);
+    if (result) {
+      res.json({ message: "Product deleted successfully" });
+    } else {
+      res.status(404).json({ message: "Product not found" });
     }
-    try {
-      const deletedProduct = await Products.findOneAndDelete({ id: id });
-      if (!deletedProduct) {
-        return res.status(404).json({ message: 'Product not found' });
-      }
-      return res.json({ message: 'Product deleted successfully' });
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal server error', error: error.message });
-    }
-  };
-
-  export const updateProduct = async (req, res) => {
-    const { name, price, category, id } = req.params;
-    if (!id) {
-      return res.status(400).json({ message: "Bad request", data: null });
-    }
-
-  const upProduct = Products.findByIdAndUpdate({id: id})
-  
-
-
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error: error.message });
   }
+};
