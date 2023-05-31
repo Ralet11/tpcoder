@@ -25,7 +25,7 @@ async function login(req, res) {
     // Generar el token JWT
     const token = jwt.sign({ user }, 'secretKey', { expiresIn: '1h' });
 
-    res.json({ token });
+    res.json({ token, message: "Usuario logueado" });
   } catch (error) {
     res.status(401).json({ message: error.message });
   }
