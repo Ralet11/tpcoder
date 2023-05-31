@@ -11,11 +11,15 @@ export class Repository {
       // Implementación del guardado
     }
   
-    async update(id, data) {
+    async updateItem(id, data) {
       // Implementación de la actualización
     }
   
     async delete(id) {
       // Implementación de la eliminación
+    }
+
+    async deletItem(id) {
+
     }
   }

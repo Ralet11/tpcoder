@@ -1,11 +1,14 @@
 import { ProductRepository } from "../Modules/Products/productsRepository.js";
 
-const ProductDao = new ProductRepository
+const ProductRep = new ProductRepository
 
 export const getProductById = async (req, res) => {
   const { id } = req.params;
   try {
-    const product = await ProductDao.findOne(id);
+    const product = await ProductRep.findOne(id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
     res.json({ data: product });
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error: error.message });
@@ -14,7 +17,7 @@ export const getProductById = async (req, res) => {
 
 export const getAllProducts = async (req, res) => {
   try {
-    const products = await ProductDao.find();
+    const products = await ProductRep.find();
     res.json({ data: products });
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error: error.message });
@@ -22,26 +25,28 @@ export const getAllProducts = async (req, res) => {
 };
 
 export const createProduct = async (req, res) => {
-  const { name, price, category, id } = req.body;
-  const product = { name, price, category, id };
+  const { name, price, category } = req.body;
+  const product = { name, price, category };
 
-  if (!id || !name || !price || !category) {
+  if (!name || !price || !category) {
     return res.status(400).json({ message: "Bad request", data: null });
   }
 
   try {
-    const existingProduct = await ProductDao.findOne(id);
+    const existingProduct = await ProductRep.getProductByFields({ name, price, category });
 
     if (existingProduct) {
       return res.status(409).json({ message: "Product already exists", data: null });
     }
 
-    const newProduct = await ProductDao.save(product);
+    const newProduct = await ProductRep.save(product);
     res.status(201).json({ data: newProduct, message: "Product has been created" });
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error: error.message });
   }
 };
+
+
 export const deleteProduct = async (req, res) => {
   const { id } = req.params;
   if (!id) {
@@ -49,7 +54,7 @@ export const deleteProduct = async (req, res) => {
   }
 
   try {
-    const result = await ProductDao.delete(id);
+    const result = await ProductRep.delete(id);
     if (result) {
       res.json({ message: "Product deleted successfully" });
     } else {
@@ -70,7 +75,7 @@ export const updateProduct = async (req, res) => {
   }
 
   try {
-    const existingProduct = await ProductDao.findOne(id);
+    const existingProduct = await ProductRep.findOne(id);
 
     if (!existingProduct) {
       return res.status(404).json({ message: "Product not found", data: null });
@@ -85,6 +90,18 @@ export const updateProduct = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error: error.message });
   }
-};
+
+}
+  export const getProductByCategory = async (req,res) => {
+    const {categoria} = req.params
+    
+   try {
+    const products = await ProductRep.getProductByCategory(categoria)
+    res.json({data: products })
+   } catch (error){
+    res.starts(500).json({message: "internal server error", error: error.message})
+   }
+}
+
 
 

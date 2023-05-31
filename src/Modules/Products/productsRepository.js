@@ -16,6 +16,8 @@ export class ProductRepository extends Repository {
     const product = await this.ProductDao.getProductById(id);
     return product;
   }
+  
+  
 
   async save(product) {
     const _product = await this.ProductDao.createProduct(product);
@@ -30,5 +32,15 @@ export class ProductRepository extends Repository {
   async update(id, product) {
     const _product = await this.ProductDao.updateProduct(id, product);
     return _product;
+  }
+
+  async getProductByFields(fields) {
+    const product = await this.ProductDao.getProductByFields(fields);
+    return product;
+  }
+
+  async getProductByCategory(categoria){
+    const products = await this.ProductDao.getProductByCategory(categoria)
+    return products
   }
 }

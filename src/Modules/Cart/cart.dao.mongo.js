@@ -1,7 +1,8 @@
-import { mongoose } from "mongoose";
+import  mongoose  from "mongoose";
 import { ProductRepository } from "../Products/productsRepository.js";
 
 const Schema = mongoose.Schema;
+const ProductRep = new ProductRepository
 
 const CartsSchema = new Schema({
   email: {
@@ -34,100 +35,106 @@ const CartsSchema = new Schema({
 const CartModel = mongoose.model('CartModel', CartsSchema);
 
 export class CartDAOMongo {
-  async createCart(email, dateTime, items, deliveryAddress) {
-    const cart = new CartModel({
-      email,
-      dateTime,
-      items,
-      deliveryAddress
-    });
 
-    await cart.save();
-    return cart;
-  }
-
-  async getCartById(_id) {
-    const cart = await CartModel.findById(_id);
-    return cart;
-  }
-
-  async getCartItems(cartId) {
-    const cart = await CartModel.findById(cartId);
+  async getCartItems() {
+    const cart = await CartModel.findOne();
     if (!cart) {
       throw new Error('Cart not found');
     }
-
-    const productIds = cart.items.map(item => item.product);
-    const products = await ProductRepository.find({ _id: { $in: productIds } });
-
-    const cartItems = cart.items.map(item => {
-      const product = products.find(p => p._id.toString() === item.product.toString());
-      return {
-        product,
-        quantity: item.quantity
-      };
-    });
-
-    return cartItems;
-  }
-
-  async addProductToCart(cartId, productId) {
-    let cart = await CartModel.findById(cartId);
   
-    if (!cart) {
-      // Si no hay un carrito existente, crear uno nuevo
-      cart = new CartModel({
-        _id: cartId,
-        items: [{
-          product: productId,
-          quantity: 1
-        }]
-      });
-    } else {
-      // Verificar si el producto ya está en el carrito
-      const existingItem = cart.items.find(item => item.product.toString() === productId.toString());
-      if (existingItem) {
-        // Si el producto ya está en el carrito, incrementar la cantidad en 1
-        existingItem.quantity += 1;
-      } else {
-        // Si el producto no está en el carrito, agregarlo con cantidad 1
-        cart.items.push({
-          product: productId,
-          quantity: 1
+    const cartItems = [];
+  
+    for (const item of cart.items) {
+      const product = await ProductRep.findOne(item.product);
+      if (product) {
+        cartItems.push({
+          product,
+          quantity: item.quantity
         });
       }
     }
   
-    await cart.save();
-    return cart;
+    return cartItems;
   }
-
-  async deleteCart(cartId) {
-    const result = await CartModel.findByIdAndDelete(cartId);
-    return result;
-  }
-
-  async updateCart(cartId, updatedCartData) {
-    const cart = await CartModel.findOneAndUpdate(
-      { _id: cartId },
-      {
-        $set: {
-          email: updatedCartData.email || cart.email,
-          dateTime: updatedCartData.dateTime || cart.dateTime,
-          items: updatedCartData.items || cart.items,
-          deliveryAddress: updatedCartData.deliveryAddress || cart.deliveryAddress
-        }
-      },
-      { new: true }
-    );
   
-    if (!cart) {
-      throw new Error('Cart not found');
+
+    async addProductToCart(productId, email, dateTime, deliveryAddress) {
+      let cart = await CartModel.findOne();
+  
+      if (!cart) {
+        const cartId = new mongoose.Types.ObjectId();
+        cart = new CartModel({
+          _id: cartId,
+          email,
+          dateTime,
+          items: [{ product: productId, quantity: 1 }],
+          deliveryAddress
+        });
+      } else {
+        const existingItem = cart.items.find(item => item.product.toString() === productId.toString());
+        if (existingItem) {
+          existingItem.quantity += 1;
+        } else {
+          cart.items.push({ product: productId, quantity: 1 });
+        }
+      }
+  
+      await cart.save();
+      return cart;
     }
   
-    return cart;
+    async deleteCart() {
+      const result = await CartModel.findOneAndDelete()
+      return result;
+    }
+
+    
+    async deleteCartItem(itemId) {
+      try {
+        const cart = await CartModel.findOneAndUpdate(
+          {},
+          { $pull: { items: { product: new mongoose.Types.ObjectId(itemId) } } },
+          { new: true }
+        );
+    
+        if (!cart) {
+          throw new Error('Cart not found');
+        }
+    
+        if (cart.items.length === 0) {
+          await CartModel.findByIdAndDelete(cart._id);
+        }
+    
+        return true;
+      } catch (error) {
+        throw new Error(error.message);
+      }
+    }
+    
+    
+    async updateCartItem(itemId, updatedItemData) {
+      try {
+        const cart = await CartModel.findOneAndUpdate(
+          {},
+          { $set: { "items.$[item].quantity": updatedItemData.quantity } },
+          { new: true, arrayFilters: [{ "item.product": itemId }] }
+        );
+    
+        if (!cart) {
+          throw new Error('Cart not found');
+        }
+    
+        const updatedItem = cart.items.find(item => item.product.toString() === itemId);
+    
+        if (!updatedItem) {
+          throw new Error('CartItem not found');
+        }
+    
+        return updatedItem;
+      } catch (error) {
+        throw new Error(error.message);
+      }
+    }
+    
+    
   }
-}
-
-
-

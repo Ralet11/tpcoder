@@ -22,10 +22,6 @@ const ProductsSchema = new Schema({
     type: String,
     required: true
   },
-  id: {
-    type: Number,
-    required: true
-  }
 });
 
 const Products = mongoose.model('Products', ProductsSchema);
@@ -37,9 +33,10 @@ export class ProductDAOMongo {
   }
 
   async getProductById(id) {
-    const product = await Products.findOne({ id });
+    const product = await Products.findOne({ _id: id });
     return this.mapProductToDTO(product);
   }
+  
   
   async createProduct(product) {
     const validatedProduct = { ...ProductDTO, ...product };
@@ -48,15 +45,26 @@ export class ProductDAOMongo {
     return this.mapProductToDTO(newProduct);
   }
 
+  async getProductByFields(fields) {
+    const product = await Products.findOne(fields);
+    return this.mapProductToDTO(product);
+  }
+
   async deleteProduct(id) {
-    await Products.deleteOne({ id });
+    await Products.deleteOne({ _id: id });
     return true;
   }
 
   async updateProduct(id, product) {
-    const updatedProduct = await Products.findByIdAndUpdate(id, product, { new: true });
+    const updatedProduct = await Products.findByIdAndUpdate({ _id: id }, product, { new: true });
     return this.mapProductToDTO(updatedProduct);
   }
+
+  async getProductByCategory(categoria) {
+    const products = await Products.find({category: categoria})
+    return products
+  }
+  
 
   mapProductToDTO(product) {
     if (!product) {
