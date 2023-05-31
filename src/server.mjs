@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cartRouter from "./routes/cart.router.js"
 import productsRouter from "./routes/product.router.js";
+import userRouter from "./routes/user.router.js";
 
 
 const app = express();
@@ -24,9 +25,11 @@ mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
 app.use(express.json())
 app.use("/api/products", productsRouter);
 app.use("/api", cartRouter);
+app.use("/api", userRouter)
 
 
 
 app.listen(3000, ()=> {
     console.log("servidor escuchando en puerto 3000")
 })
+

@@ -42,9 +42,31 @@ export class UsersDaoMongo {
     return newUser;
   }
 
-  async logIn(username, password) {
+  async userLogin(username, password) {
     try {
-    const userLogged = Users.findOne({username, password})
-    return userLogged
+      const user = await Users.findOne({ username, password });
+
+      if (!user) {
+        throw new Error('Invalid username or password');
+      }
+
+      return user;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  async deleteUser(username) {
+    try {
+      const deletedUser = await Users.findOneAndDelete({ username });
+
+      if (!deletedUser) {
+        throw new Error('User not found');
+      }
+
+      return deletedUser;
+    } catch (error) {
+      throw new Error(error.message);
+    }
   }
 }

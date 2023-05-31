@@ -1,4 +1,4 @@
-import { Repository } from "../repository.js";
+import { Repository } from "./repository.js";
 import { ProductDAOMongo } from "./products.dao.mongo.js";
 
 export class ProductRepository extends Repository {
