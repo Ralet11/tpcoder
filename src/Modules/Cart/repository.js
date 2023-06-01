@@ -1,4 +1,6 @@
 export class CartRepo {
+    async find() {}
+
     async findOne(id){}
 
     async findItems(){}

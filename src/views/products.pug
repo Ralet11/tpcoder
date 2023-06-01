@@ -1,0 +1,149 @@
+html
+  head
+    style.
+      h1 {
+        font-size: 24px;
+        margin-bottom: 10px;
+      }
+      
+      ul {
+        list-style-type: none;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+      }
+      
+      li {
+        width: calc(33.33% - 20px);
+        margin: 10px;
+      }
+      
+      .product-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      
+      .product-image {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        margin-bottom: 10px;
+      }
+      
+  body
+    h1 Product Names
+    ul
+      each product in products
+        li
+          .product-card
+            p.product-name #{product.name}
+            img.product-image(src=`/imagenes/${product.id}.jpg`, alt=product.name)
+            p.product-price #{product.price}
+            p.product-category #{product.category}
+            button.add-to-cart-btn(onclick=`addToCart('${product.id}')`) Add to Cart
+
+    script.
+      function addToCart(productId) {
+        fetch('/api/carrito/actual')
+          .then(response => response.json())
+          .then(data => {
+            if (data) {
+              sendAddToCartRequest(productId); // Llamar a la función para agregar el producto al carrito existente
+            } else {
+              showCartForm(productId);;
+            }
+          })
+          .catch(error => console.log(error));
+      }
+
+
+      function showCartForm(productId) {
+        const form = document.createElement('form');
+        const title = document.createElement('h2');
+        const emailLabel = document.createElement('label');
+        const emailInput = document.createElement('input');
+        const addressLabel = document.createElement('label');
+        const addressInput = document.createElement('input');
+        const submitBtn = document.createElement('button');
+
+        title.textContent = 'Danos más detalles para iniciar tu compra';
+        emailLabel.textContent = 'Email:';
+        emailInput.type = 'email';
+        emailInput.required = true;
+
+        addressLabel.textContent = 'Address:';
+        addressInput.type = 'text';
+        addressInput.required = true;
+
+        submitBtn.textContent = 'Add to Cart';
+        submitBtn.type = 'submit';
+
+        form.appendChild(title);
+        form.appendChild(emailLabel);
+        form.appendChild(emailInput);
+        form.appendChild(addressLabel);
+        form.appendChild(addressInput);
+        form.appendChild(submitBtn);
+
+        form.addEventListener('submit', (event) => {
+          event.preventDefault();
+          const email = emailInput.value;
+          const address = addressInput.value;
+          sendAddToCartRequest(productId, email, address);
+          document.body.removeChild(form); // Eliminar el formulario después de enviar la solicitud
+        });
+
+        // Estilos para el formulario
+        form.style.position = 'fixed';
+        form.style.top = '0';
+        form.style.left = '0';
+        form.style.background = '#fff';
+        form.style.padding = '10px';
+        form.style.border = '1px solid #ccc';
+        form.style.borderRadius = '5px';
+
+        // Estilos para los elementos del formulario
+        title.style.marginTop = '0';
+        emailLabel.style.display = 'block';
+        emailInput.style.width = '100%';
+        addressLabel.style.display = 'block';
+        addressInput.style.width = '100%';
+
+        // Clases CSS para aplicar estilos desde una hoja de estilos externa
+        form.classList.add('cart-form');
+        title.classList.add('cart-form-title');
+        emailLabel.classList.add('cart-form-label');
+        emailInput.classList.add('cart-form-input');
+        addressLabel.classList.add('cart-form-label');
+        addressInput.classList.add('cart-form-input');
+
+        document.body.appendChild(form);
+      }
+
+      function sendAddToCartRequest(productId, email, address) {
+        const payload = {
+          productId,
+          email,
+          deliveryAddress: address,
+          dateTime: new Date().toISOString()  // Agregar el parámetro dateTime con la fecha y hora actual
+        };
+
+        fetch('/api/carrito', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            // Aquí puedes realizar acciones adicionales después de agregar el producto al carrito
+          })
+          .catch(error => console.log(error));
+      }

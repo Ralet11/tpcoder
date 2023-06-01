@@ -3,9 +3,23 @@ import mongoose from "mongoose";
 import cartRouter from "./routes/cart.router.js"
 import productsRouter from "./routes/product.router.js";
 import userRouter from "./routes/user.router.js";
+import bodyParser from "body-parser";
+import path from "path";
+import { fileURLToPath } from "url";
+import cookieParser from "cookie-parser";
 
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
+
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "pug");
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(cookieParser())
+app.use(express.static("public"));
 
 
 

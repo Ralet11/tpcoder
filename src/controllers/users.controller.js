@@ -25,11 +25,17 @@ async function login(req, res) {
     // Generar el token JWT
     const token = jwt.sign({ user }, 'secretKey', { expiresIn: '1h' });
 
-    res.json({ token, message: "Usuario logueado" });
+    // Configurar la cookie con el token
+    res.cookie('token', token, { httpOnly: true });
+
+    // Redirigir al usuario a la ruta deseada
+    res.redirect('/api/products/');
   } catch (error) {
     res.status(401).json({ message: error.message });
   }
 }
+
+
 
 // Middleware para verificar el token JWT en las rutas protegidas
 

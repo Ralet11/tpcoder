@@ -36,6 +36,16 @@ const CartModel = mongoose.model('CartModel', CartsSchema);
 
 export class CartDAOMongo {
 
+  async getCart() {
+    const cart = await CartModel.find();
+    if (!cart) {
+      console.log(cart)
+      return null; // Devolver un valor distinto de null para indicar que no se encontró ningún carrito
+    } else {
+      return cart;
+    }
+  }
+  
   async getCartItems() {
     const cart = await CartModel.findOne();
     if (!cart) {

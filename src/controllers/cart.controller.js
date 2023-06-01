@@ -2,6 +2,18 @@ import { CartRepository } from "../Modules/Cart/cartRepository.js";
 
 const CartDao = new CartRepository();
 
+export const getCart = async (req, res) => {
+  try {
+    const cart = await CartDao.find();
+    const cartExists = cart !== null && cart.length > 0; // Verificar si el carrito existe y tiene elementos
+    console.log(cartExists)
+    res.json(cartExists);
+  } catch (error) {
+    res.status(500).json({ message: "internal server error", error: error.message });
+  }
+}
+
+
 
 export const getCartById = async (req, res) => {
   const { id } = req.params;

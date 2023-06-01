@@ -44,17 +44,23 @@ export class UsersDaoMongo {
 
   async userLogin(username, password) {
     try {
-      const user = await Users.findOne({ username, password });
-
+      const user = await Users.findOne({ username });
+  
       if (!user) {
         throw new Error('Invalid username or password');
       }
-
+  
+      // Comparar la contraseña proporcionada con la almacenada en la base de datos
+      if (user.password !== password) {
+        throw new Error('Invalid username or password');
+      }
+  
       return user;
     } catch (error) {
       throw new Error(error.message);
     }
   }
+  
 
   async deleteUser(username) {
     try {

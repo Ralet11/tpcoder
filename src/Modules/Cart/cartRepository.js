@@ -7,6 +7,11 @@ export class CartRepository extends CartRepo {
         this.CartDao = CartDao;
       }
 
+      async find(){
+        const cart = await this.CartDao.getCart();
+        return cart
+      }
+
       async findItems() {
         const items = await this.CartDao.getCartItems();
         return items
