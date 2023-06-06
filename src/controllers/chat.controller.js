@@ -5,12 +5,12 @@ const chatRep = new chatDaoMongo
 
 export const renderChat = async (req,res) => {
     const user = await User(req, res)
-    res.render("chat", {user})
+    res.render("chat", {username: user.username, userEmail: user.email})
 }
 
 export const renderPersonalChat = async (req, res) => {
     const email = req.params.email
     const chats = await chatRep.getChatsByEmail(email)
     console.log(chats)
-    res.render("chat-personal", {chats})
+    res.render("chat-personal.pug", {chats})
 }

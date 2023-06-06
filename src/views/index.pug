@@ -1,110 +1,107 @@
-style.
-  body {
-    background: linear-gradient(45deg, #171738, #1A2342, #1B2A4F);
-  }
+doctype html
+html
+  head
+    title My Page
+    style.
+      body {
+        background: linear-gradient(45deg, #171738, #1A2342, #1B2A4F);
+      }
 
-  form {
-    max-width: 400px;
-    margin: 0 auto;
-  }
+      form {
+        max-width: 400px;
+        margin: 0 auto;
+      }
 
-  div {
-    margin-bottom: 10px;
-  }
+      div {
+        margin-bottom: 10px;
+      }
 
-  label {
-    display: block;
-    font-weight: bold;
-    color: #ffffff;
-  }
+      label {
+        display: block;
+        font-weight: bold;
+        color: #ffffff;
+      }
 
-  input[type="text"],
-  input[type="password"] {
-    width: 100%;
-    padding: 5px;
-    font-size: 16px;
-  }
+      input[type="text"],
+      input[type="password"] {
+        width: 100%;
+        padding: 5px;
+        font-size: 16px;
+      }
 
-  input[type="submit"] {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-  }
+      input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+      }
 
-  input[type="submit"]:hover {
-    background-color: #45a049;
-  }
-  
-  .register {
-    display: none;
-    border: 1px solid #ffffff;
-    padding: 10px;
-    margin-top: 10px;
-  }
+      input[type="submit"]:hover {
+        background-color: #45a049;
+      }
 
-div.logo-container
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
+      .register {
+        display: none;
+        border: 1px solid #ffffff;
+        padding: 10px;
+        margin-top: 10px;
+      }
 
-div.logo-container img.logo
-  max-width: 150px;
+      div.logo-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+      }
 
-div.login
-  div.logo-container
-    img.logo(src="ruta-de-la-imagen", alt="Logo de la aplicación")
-  form(action="/api/", method="POST")
-    div
-      label(for="login-username") Username:
-      input(type="text", id="login-username", name="username", required)
-    div
-      label(for="login-password") Password:
-      input(type="password", id="login-password", name="password", required)
-    div
-      input(type="submit", value="Login")
-    div
-      button(onclick="toggleRegisterForm()") Registrarse
+      div.logo-container img.logo {
+        max-width: 150px;
+      }
+  body
+    div.login
+      div.logo-container
+        img.logo(src="/imagenes/actiongames.png", alt="Logo de la aplicación")
+      form(action="/api/", method="POST")
+        div
+          label(for="login-username") Username:
+          input(type="text", id="login-username", name="username", required)
+        div
+          label(for="login-password") Password:
+          input(type="password", id="login-password", name="password", required)
+        div
+          input(type="submit", value="Login")
+        div
+          button(onclick="toggleRegisterForm()") Registrarse
 
-div.register
-  form(action="/api/register", method="POST")
-    div
-      label(for="register-username") Username:
-      input(type="text", id="register-username", name="username", required)
-    div
-      label(for="register-email") Email:
-      input(type="text", id="register-email", name="email", required)
-    div
-      label(for="register-phone") Phone Number:
-      input(type="text", id="register-phone", name="phoneNum", required)
-    div
-      label(for="register-password") Password:
-      input(type="password", id="register-password", name="password", required)
-    div
-      label(for="register-confirm-password") Confirm Password:
-      input(type="password", id="register-confirm-password", name="confirmPassword", required)
-    div
-      input(type="submit", value="Registrarse")
-    div
-      button(onclick="toggleRegisterForm()") Cerrar
+    div.register
+      form(action="/api/register", method="POST")
+        div
+          label(for="register-username") Username:
+          input(type="text", id="register-username", name="username", required)
+        div
+          label(for="register-email") Email:
+          input(type="text", id="register-email", name="email", required)
+        div
+          label(for="register-phone") Phone Number:
+          input(type="text", id="register-phone", name="phoneNum", required)
+        div
+          label(for="register-password") Password:
+          input(type="password", id="register-password", name="password", required)
+        div
+          label(for="register-confirm-password") Confirm Password:
+          input(type="password", id="register-confirm-password", name="confirmPassword", required)
+        div
+          input(type="submit", value="Registrarse")
+        div
+          button(onclick="toggleRegisterForm()") Cerrar
 
-
-
-
-
-
-
-
-
-
-script.
-  function toggleRegisterForm() {
-    const registerForm = document.querySelector('.register');
-    if (registerForm.style.display === 'none') {
-      registerForm.style.display = 'block';
-    } else {
-      registerForm.style.display = 'none';
+  script.
+    function toggleRegisterForm() {
+      const registerForm = document.querySelector('.register');
+      if (registerForm.style.display === 'none') {
+        registerForm.style.display = 'block';
+      } else {
+        registerForm.style.display = 'none';
+      }
     }
-  }

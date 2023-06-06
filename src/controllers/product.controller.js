@@ -22,7 +22,7 @@ export const getAllProducts = async (req, res) => {
   try {
     const _user = await User(req, res)
     const products = await ProductRep.find();
-    res.render('products', { products, _user });
+    res.render('products.pug', { products, _user });
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error: error.message });
   }

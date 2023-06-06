@@ -1,0 +1,105 @@
+
+<script>
+  function outCart() {
+    window.location.href = "/api/products";
+  }
+
+
+  function openChatPersonal() {
+    const userEmail = "{{userEmail}}";
+    window.location.href = `/api/chat/${userEmail}`;
+  }
+
+  $(function() {
+    const socket = io();
+
+    const chatForm = $("#chat-form");
+    const chatText = $("#message-input");
+    const chatMessages = $("#chat-messages");
+    const userList = $("#user-list");
+
+    // Obtén el objeto user desde el servidor
+
+    socket.emit("join", "{{userEmail}}");
+
+    chatForm.on("submit", e => {
+      e.preventDefault();
+      const message = chatText.val();
+      socket.emit("send message", message);
+      chatText.val("");
+    });
+
+    socket.on("new message", function(data) {
+      const username = data.username;
+      const message = data.message;
+      const messageWithUsername = `<strong>${username}:</strong> ${message}`;
+      chatMessages.append(`<p>${messageWithUsername}</p>`);
+    });
+
+    socket.on("user joined", function(users) {
+      userList.html("");
+      users.forEach(user => {
+        userList.append(`<li>${user}</li>`);
+      });
+    });
+
+    socket.on("user left", function(users) {
+      userList.html("");
+      users.forEach(user => {
+        userList.append(`<li>${user}</li>`);
+      });
+    });
+
+    socket.on("private message", data => {
+      const sender = data.sender;
+      const message = data.message;
+      const messageWithUsername = `<strong>${sender}:</strong> ${message}`;
+      const privateMessage = `<p class="private-message">${messageWithUsername}</p>`;
+      chatMessages.append(privateMessage);
+    });
+
+    socket.on("error", errorMessage => {
+      const errorMessageWithStyle = `<strong style="color: red;">Error:</strong> ${errorMessage}`;
+      const error = `<p class="error-message">${errorMessageWithStyle}</p>`;
+      chatMessages.append(error);
+    });
+
+    socket.on("old chats", function(oldMessages) {
+      oldMessages.forEach(function(message) {
+        console.log(message.name);
+        const username = message.name;
+        const msg = message.msg;
+        const messageWithUsername = `<strong>${username}:</strong> ${msg}`;
+        chatMessages.append(`<p>${messageWithUsername}</p>`);
+      });
+    });
+  });
+</script>
+
+<div class="nav">
+  <button class="cart-button" onclick="outCart()">Volver a productos</button>
+  <button class="chat-button" onclick="openChatPersonal()">Mis Chats</button>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <h1>Chat en tiempo real con Socket.io y Bootstrap</h1>
+      <hr>
+      <div class="row">
+        <div class="col-md-8">
+          <div class="chat-window" id="chat-messages"></div>
+        </div>
+        <div class="col-md-4">
+          <h3>Lista de usuarios</h3>
+          <ul class="list-group" id="user-list"></ul>
+        </div>
+      </div>
+      <form id="chat-form">
+        <div class="form-group">
+          <input class="form-control" type="text" id="message-input" placeholder="Escribe tu mensaje">
+        </div>
+        <button class="btn btn-primary" type="submit">Enviar</button>
+      </form>
+    </div>
+  </div>
+</div>

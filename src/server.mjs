@@ -12,14 +12,23 @@ import { Server } from "socket.io";
 import http from "http";
 import chatRouter from "./routes/chat.router.js";
 import { SocketIO } from "./sockets.js";
+import exphbs from "express-handlebars"
+import dotenv from "dotenv"
 
 const app = express();
+
+dotenv.config()
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
+
+const hbs = exphbs.create();
+app.engine("handlebars", hbs.engine);
+app.set("view engine", "handlebars");
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -50,6 +59,6 @@ const io = new Server(httpServer);
 
 SocketIO(io);
 
-httpServer.listen(3000, () => {
+httpServer.listen(process.env.PORT, () => {
   console.log("Servidor escuchando en el puerto 3000");
 });

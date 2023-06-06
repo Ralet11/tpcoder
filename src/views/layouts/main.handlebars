@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat con Socket.io y Bootstrap</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <style>
+      body {
+        background: linear-gradient(45deg, #171738, #1A2342, #1B2A4F);
+      }
+
+      .chat-window {
+        height: 300px;
+        overflow-y: scroll;
+        background-color: #2d2d2d;
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+        color: #ffffff
+      }
+
+      .private-message {
+        font-weight: italic;
+        color: #2D7AC0;
+      }
+
+      .nav {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 10px;
+        background-color: #f1f1f1;
+      }
+
+      .cart-button {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px 10px 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .cart-button:hover {
+        background-color: #45a049;
+      }
+
+      .chat-button {
+        background-color: #109DFA;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-left: 10px;
+        margin-right: 10px;
+      }
+
+      .chat-button:hover {
+        background-color: #109DDA;
+      }
+
+      #user-list {
+        color: #ffffff;
+      }
+
+      h1,
+      h3 {
+        color: #ffffff;
+      }
+    </style>
+  </head>
+  <body>
+    {{{body}}}
+  </body>
+</html>
