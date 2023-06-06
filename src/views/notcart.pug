@@ -1,0 +1,91 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Carrito
+    style.
+      
+      body {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(45deg, #171738, #1A2342, #1B2A4F);;
+        display: block ;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      .container {
+        text-align: center;
+      }
+
+      .logo {
+        margin-bottom: 20px;
+      }
+
+      .message {
+        font-size: 24px;
+        font-weight: bold;
+        color: #DB4437;
+        margin-bottom: 10px;
+      }
+
+      .subtitle {
+        font-size: 18px;
+        color: #5F6368;
+        margin-bottom: 20px;
+      }
+
+      .link {
+        color: #1A73E8;
+        text-decoration: none;
+        font-weight: bold;
+      }
+      .nav {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 10px;
+        background-color: #f1f1f1;
+        
+      }
+
+      .cart-button {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px 10px 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .cart-button:hover {
+        background-color: #45a049;
+      }
+
+      .chat-button {
+        background-color: #109DFA;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-left: 10px;
+        margin-right: 10px
+      }
+
+      .chat-button:hover {
+        background-color: #109DDA;
+      }
+
+  body
+    div.nav
+      button.cart-button(onclick="outCart()") Salir del carrito
+      button.chat-button(onclick="openChat()") Chatea con nosotros
+
+    .container
+      img.logo(src="https://www.google.com/images/errors/robot.png", alt="Robot")
+      p.message Oops! Parece que no tienes nada en tu carrito aún.
+      p.subtitle Trata de explorar nuestra tienda y añadir algunos productos interesantes. ¡Te encantarán!
+      a.link(href="/api/products") Ir a la tienda

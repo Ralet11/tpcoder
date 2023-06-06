@@ -1,4 +1,6 @@
+import { resolve } from "path";
 import { CartRepository } from "../Modules/Cart/cartRepository.js";
+import { User } from "./users.controller.js";
 
 const CartDao = new CartRepository();
 
@@ -13,6 +15,16 @@ export const getCart = async (req, res) => {
   }
 }
 
+export const cart = async () => {
+  try {
+    const cart = await CartDao.find();
+    return cart; // Retornar el carrito en lugar de enviar una respuesta JSON
+  } catch (error) {
+    throw new Error("Internal server error");
+  }
+};
+
+
 
 
 export const getCartById = async (req, res) => {
@@ -25,14 +37,49 @@ export const getCartById = async (req, res) => {
   }
 };
 
-export const getCartItems = async (req, res) => {
+export const renderCart = async (req, res) => {
   try {
-    const cartItems = await CartDao.findItems();
-    res.json({ data: cartItems });
+
+    function getToTalPrice(cartItems){
+      let priceTotal = 0;
+      cartItems.forEach(item => {
+      priceTotal += item.product.price * item.quantity;
+    });
+      return priceTotal
+    }
+    function getTotalProducts(cartItems) {
+      let total = 0;
+      cartItems.forEach(function(item) {
+        total += item.quantity;
+      });
+      return total;
+    }
+
+    const _cart = await cart(req, res); // Obtener el carrito
+    const user = await User(req, res); // Obtener el usuario
+
+    if (_cart && _cart.length > 0) {
+      const cartItems = await CartDao.findItems(); // Obtener los items del carrito
+      const totalProducts = getTotalProducts(cartItems)
+      const totalPrice = getToTalPrice(cartItems)
+      res.render("cart", {
+        cartItems,
+        _cart,
+        user,
+        totalProducts,
+        totalPrice
+      });
+    } else {
+      res.render("notcart"); // Renderizar la vista cuando no hay un carrito
+    }
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error: error.message });
   }
 };
+
+
+
+
 
 export const addProductToCart = async (req, res) => {
   const { productId, email, dateTime, deliveryAddress } = req.body;
@@ -89,6 +136,11 @@ export const updateCartItem = async (req, res) => {
     res.status(500).json({ message: "Internal server error", error: error.message });
   }
 };
+
+export const getItems = async (req,res) => {
+  const cartItems = await CartDao.findItems()
+  return cartItems
+}
 
 
 

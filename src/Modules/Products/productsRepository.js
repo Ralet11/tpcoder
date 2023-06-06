@@ -39,8 +39,8 @@ export class ProductRepository extends Repository {
     return product;
   }
 
-  async getProductByCategory(categoria){
-    const products = await this.ProductDao.getProductByCategory(categoria)
+  async getProductByCategory(category){
+    const products = await this.ProductDao.getProductByCategory(category)
     return products
   }
 }

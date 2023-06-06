@@ -1,6 +1,7 @@
 import { ProductRepository } from "../Modules/Products/productsRepository.js";
 import axios from "axios";
 import fs from 'fs';
+import { User } from "./users.controller.js";
 
 const ProductRep = new ProductRepository
 
@@ -19,10 +20,24 @@ export const getProductById = async (req, res) => {
 
 export const getAllProducts = async (req, res) => {
   try {
+    const _user = await User(req, res)
     const products = await ProductRep.find();
-    res.render('products', { products });
+    res.render('products', { products, _user });
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+};
+
+export const getProductsByCat = async (req, res) => {
+  const { categoria } = req.params;
+  console.log(categoria);
+  try {
+    const _user = await User(req, res);
+    const products = await ProductRep.getProductByCategory(categoria);
+    console.log(products, _user);
+    res.render("productosCategoria", { products, _user });
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -102,16 +117,7 @@ export const updateProduct = async (req, res) => {
   }
 
 }
-  export const getProductByCategory = async (req,res) => {
-    const {categoria} = req.params
-    
-   try {
-    const products = await ProductRep.getProductByCategory(categoria)
-    res.json({data: products })
-   } catch (error){
-    res.starts(500).json({message: "internal server error", error: error.message})
-   }
-}
+ 
 
 
 

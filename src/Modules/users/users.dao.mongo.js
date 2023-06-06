@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 
 const Schema = mongoose.Schema;
 
 export const UserDTO = {
   userna: '',
-  phoneNum: 0,
+  phoneNum: null,
   email: '',
   password: ''
 };
@@ -12,19 +13,19 @@ export const UserDTO = {
 const userSchema = new Schema({
   username: {
     type: String,
-    require: true
+    required: true
   },
   phoneNum: {
     type: Number,
-    require: true
+    required: true
   },
   email: {
     type: String,
-    require: true
+    required: true
   },
   password: {
     type: String,
-    require: true
+    required: true
   }
 });
 
@@ -32,16 +33,19 @@ const Users = mongoose.model("Users", userSchema);
 
 export class UsersDaoMongo {
   async createUser(username, phoneNum, email, password) {
+    const hashedPassword = await bcrypt.hash(password, 10);
+  
     const user = new Users({
       username,
       phoneNum,
       email,
-      password
+      password: hashedPassword
     });
+  
     const newUser = await user.save();
     return newUser;
   }
-
+  
   async userLogin(username, password) {
     try {
       const user = await Users.findOne({ username });
@@ -50,8 +54,9 @@ export class UsersDaoMongo {
         throw new Error('Invalid username or password');
       }
   
-      // Comparar la contraseña proporcionada con la almacenada en la base de datos
-      if (user.password !== password) {
+      const passwordMatch = await bcrypt.compare(password, user.password);
+  
+      if (!passwordMatch) {
         throw new Error('Invalid username or password');
       }
   
@@ -60,6 +65,7 @@ export class UsersDaoMongo {
       throw new Error(error.message);
     }
   }
+  
   
 
   async deleteUser(username) {
@@ -75,4 +81,19 @@ export class UsersDaoMongo {
       throw new Error(error.message);
     }
   }
+
+  async getUser(id) {
+    try {
+      const user = await Users.findOne({_id: id});
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      return user;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 }
+    

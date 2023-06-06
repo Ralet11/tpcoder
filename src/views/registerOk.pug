@@ -1,0 +1,44 @@
+
+
+block styles
+  style.
+    .success-message {
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    .success-message h1 {
+      font-size: 24px;
+      color: #333;
+    }
+
+    .success-message img {
+      width: 200px;
+      margin-bottom: 20px;
+    }
+
+    .login-button {
+      display: block;
+      width: 200px;
+      margin: 0 auto;
+      text-align: center;
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+
+    .login-button:hover {
+      background-color: #45a049;
+    }
+
+block content
+  div(class="success-message")
+    img(src="/imagenes/confirmed.jpg", alt="Success Image")
+    h1 Usuario creado con éxito!
+    p Ahora puedes iniciar sesión.
+
+  a(class="login-button", href="/api/") Iniciar sesión

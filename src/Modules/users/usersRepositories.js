@@ -20,4 +20,9 @@ export class UsersRepository {
         const userDelete = this.UserDao.deleteUser(username)
         return userDelete
     }
+
+    async getUser(id) {
+        const user = this.UserDao.getUser(id)
+        return user
+    }
 }

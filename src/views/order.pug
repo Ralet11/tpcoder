@@ -1,0 +1,152 @@
+style.
+  
+  body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(45deg, #171738, #1A2342, #1B2A4F)
+    padding: 20px;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    font-size: 20px;
+    margin-top: 40px;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .table th,
+  .table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .price-total {
+    margin-top: 40px;
+    text-align: right;
+  }
+
+  .price-total span {
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  .order-details {
+    margin-bottom: 20px;
+  }
+
+  .product {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .product img {
+    width: 80px;
+    height: 80px;
+    margin-right: 10px;
+    object-fit: cover;
+  }
+
+  .product-info {
+    flex-grow: 1;
+  }
+
+  .link {
+    color: #007bff;
+    text-decoration: none;
+  }
+
+  .link:hover {
+    text-decoration: underline;
+  }
+  .nav {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px;
+    background-color: #f1f1f1;
+    }
+    
+    .cart-button {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 20px 10px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    }
+
+    .cart-button:hover {
+    background-color: #45a049;
+    }
+
+    .chat-button {
+    background-color: #109DFA;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+    margin-right: 10px
+    }
+
+    .chat-button:hover {
+    background-color: #109DDA;
+    }
+    .cart-item {
+    position: relative;
+    }
+
+
+div.nav
+  button.cart-button(onclick="outCart()") Salir del carrito
+  button.chat-button(onclick="openChat()") Chatea con nosotros
+.container
+  h1 Muchas gracias por su compra!
+  .order-details
+    p Se enviará la información a su correo con los detalles.
+    h2 Detalles de la orden
+    p Numero de Orden: #{order.orderNumber}
+    p Fecha y Hora: #{order.dateTime}
+  ul.table
+    li
+      table
+        thead
+          tr
+            th Productos
+            th Cantidad
+        tbody
+          each item in order.items
+            tr
+              td.product
+                img(src=`/imagenes/${item.product.id}.jpg`, alt=item.product.name)
+                .product-info
+                  p #{item.product.name}
+                  p Price: $#{item.product.price}
+              td #{item.quantity}
+  .price-total
+    span Total: $#{order.priceTotal}

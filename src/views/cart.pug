@@ -1,0 +1,238 @@
+html
+  head
+    script(src="https://unpkg.com/sweetalert/dist/sweetalert.min.js")
+  style.
+    body {
+      background: linear-gradient(45deg, #171738, #1A2342, #1B2A4F);
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+
+    .cart-container {
+      display: flex;
+      justify-content: center;
+    }
+
+    .cart-items {
+      width: 30%;
+      margin-right: auto;
+    }
+
+    .cart-item {
+      display: flex;
+      margin-bottom: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .product-image {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      margin-right: 10px;
+    }
+
+    .product-details {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .product-name {
+      font-size: 14px;
+      margin-bottom: 3px;
+    }
+
+    .product-quantity,
+    .product-price,
+    .product-category {
+      font-size: 12px;
+      margin-bottom: 2px;
+    }
+
+    .order-details {
+      width: 40%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      text-align: center;
+      position: fixed;
+      right: 20%;
+      background-color: #f1f1f1;
+      color: #333;
+    }
+
+    .order-details-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .order-details-item {
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .place-order-button {
+      margin-top: 20px;
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 10px;
+      background-color: #f1f1f1;
+      color: #333;
+    }
+
+    .cart-button {
+      background-color: #4caf50;
+      color: white;
+      padding: 10px 20px 10px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .cart-button:hover {
+      background-color: #45a049;
+    }
+
+    .chat-button {
+      background-color: #109DFA;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 10px;
+      margin-right: 10px
+    }
+
+    .chat-button:hover {
+      background-color: #109DDA;
+    }
+
+    .cart-item {
+      position: relative;
+    }
+
+    .delete-button {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 20px;
+      height: 20px;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+    }
+
+      .delete-button::before,
+      .delete-button::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 16px;
+      height: 2px;
+      background-color: red;
+      transform-origin: center;
+      }
+
+      .delete-button::before {
+      transform: translate(-50%, -50%) rotate(45deg);
+      }
+
+      .delete-button::after {
+      transform: translate(-50%, -50%) rotate(-45deg);
+      }
+
+      /* Opcional: Estilo de hover para resaltar el botón de eliminar */
+      .delete-button:hover::before,
+      .delete-button:hover::after {
+      background-color: darkred;
+      }
+
+
+
+  body
+    div.nav
+      button.cart-button(onclick="outCart()") Volver a productos
+      button.chat-button(onclick="openChat()") Chatea con nosotros
+    h1 Productos del carrito
+    div.cart-container
+      div.cart-items
+        each item in cartItems
+          .cart-item
+            img.product-image(src=`/imagenes/${item.product.id}.jpg`, alt=item.product.name)
+            .product-details
+              p.product-name #{item.product.name}
+              p.product-quantity Cantidad: #{item.quantity}
+              p.product-price Precio: #{item.product.price}
+              p.product-category Categoría: #{item.product.category}
+      div.order-details
+        .order-details
+          .order-details-title Detalles de la orden
+          .order-details-item Email: #{user.email}
+          .order-details-item Hora de la compra: #{_cart[0].dateTime}
+          .order-details-item Total de productos: #{totalProducts}
+          .order-details-item Precio final: $#{totalPrice}
+          .order-details-item Dirección de entrega: #{_cart[0].deliveryAddress}
+          .order-details-item Teléfono: #{user.phoneNum}
+          form(action="/api/order" method="GET")
+            button.place-order-button(type="button" onclick="confirmOrder()") Realizar orden
+    block scripts
+      script.
+
+        function openChat() {
+          window.location.href = "/api/chat";
+        }
+
+        function outCart() {
+          window.location.href = "/api/products";
+        }
+
+        function deleteFromCart(productId) {
+          fetch(`/api/carrito${productId}`, {
+            method: 'DELETE'
+          })
+            .then(response => response.json())
+            .then(data => {
+              console.log(data);
+              window.location.reload();
+            })
+            .catch(error => console.log(error));
+        }
+
+        function getCurrentTime() {
+          const now = new Date();
+          const options = { hour: 'numeric', minute: 'numeric', second: 'numeric' };
+          return now.toLocaleString('en-US', options);
+        }
+
+        function calculateTotalPrice(items) {
+          let totalPrice = 0;
+          for (let i = 0; i < items.length; i++) {
+            totalPrice += items[i].product.price;
+          }
+          return totalPrice.toFixed(2);
+        }
+
+        function confirmOrder() {
+          swal("Estás a punto de finalizar tu orden", {
+            buttons: ["Cancelar", "Finalizar compra"],
+          }).then((willOrder) => {
+            if (willOrder) {
+              document.querySelector("form").submit();
+            }
+          });
+        }

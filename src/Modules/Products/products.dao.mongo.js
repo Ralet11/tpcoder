@@ -28,6 +28,8 @@ const ProductsSchema = new Schema({
   }
 });
 
+
+
 const Products = mongoose.model('Products', ProductsSchema);
 
 export class ProductDAOMongo {
@@ -64,8 +66,8 @@ export class ProductDAOMongo {
     return this.mapProductToDTO(updatedProduct);
   }
 
-  async getProductByCategory(categoria) {
-    const products = await Products.find({category: categoria})
+  async getProductByCategory(category) {
+    const products = await Products.find({category: category})
     return products
   }
   
