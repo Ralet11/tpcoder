@@ -89,7 +89,7 @@ html
       justify-content: flex-end;
       align-items: center;
       padding: 10px;
-      background-color: #f1f1f1;
+      background-color: #171738;
       color: #333;
     }
 
@@ -161,11 +161,29 @@ html
       .delete-button:hover::after {
       background-color: darkred;
       }
+      .logo {
+        width: 50px;
+        height: 50px;
+        margin-right: auto;
+      }
+      .logo-container {
+        display: flex;
+        align-items: center;
+        margin-right: auto
+      }
+      .logo-text {
+        margin-left: 10px;
+        color: white;
+        font-size: 16px;
+      }
 
 
 
   body
     div.nav
+      div.logo-container
+        img.logo(src="/imagenes/logo.png", alt="Logo de la empresa", class="logo")
+        span.logo-text Action Games Improved
       button.cart-button(onclick="outCart()") Volver a productos
       button.chat-button(onclick="openChat()") Chatea con nosotros
     h1 Productos del carrito

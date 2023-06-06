@@ -35,7 +35,7 @@ export const getProductsByCat = async (req, res) => {
     const _user = await User(req, res);
     const products = await ProductRep.getProductByCategory(categoria);
     console.log(products, _user);
-    res.render("productosCategoria", { products, _user });
+    res.render("productosCategoria.pug", { products, _user });
   } catch (error) {
     console.log(error);
   }
@@ -56,7 +56,6 @@ export const createProduct = async (req, res) => {
       return res.status(409).json({ message: "Product already exists", data: null });
     }
 
-    // Guardar el producto en la base de datos
     const newProduct = await ProductRep.save({ name, price, category, image });
     
 

@@ -2,13 +2,13 @@ style.
   
   body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(45deg, #171738, #1A2342, #1B2A4F)
+    background: linear-gradient(45deg, #171738, #1A2342, #1B2A4F);
     padding: 20px;
   }
 
   .container {
     max-width: 800px;
-    margin: 0 auto;
+    margin: 40px auto 0;
     background-color: #fff;
     padding: 20px;
     border-radius: 5px;
@@ -87,7 +87,7 @@ style.
     justify-content: flex-end;
     align-items: center;
     padding: 10px;
-    background-color: #f1f1f1;
+    background-color: #171738;
     }
     
     .cart-button {
@@ -120,10 +120,28 @@ style.
     .cart-item {
     position: relative;
     }
+    .logo {
+      width: 50px;
+      height: 50px;
+      margin-right: auto;
+    }
+    .logo-container {
+      display: flex;
+      align-items: center;
+      margin-right: auto
+    }
+    .logo-text {
+      margin-left: 10px;
+      color: white;
+      font-size: 16px;
+    }
 
 
 div.nav
-  button.cart-button(onclick="outCart()") Salir del carrito
+  div.logo-container
+    img.logo(src="/imagenes/logo.png", alt="Logo de la empresa", class="logo")
+    span.logo-text Action Games Improved
+  button.cart-button(onclick="outCart()") Volver a la tienda
   button.chat-button(onclick="openChat()") Chatea con nosotros
 .container
   h1 Muchas gracias por su compra!
@@ -150,3 +168,12 @@ div.nav
               td #{item.quantity}
   .price-total
     span Total: $#{order.priceTotal}
+script.
+
+        function openChat() {
+          window.location.href = "/api/chat";
+        }
+
+        function outCart() {
+          window.location.href = "/api/products";
+        }

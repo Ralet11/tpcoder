@@ -55,14 +55,14 @@ export const renderCart = async (req, res) => {
       return total;
     }
 
-    const _cart = await cart(req, res); // Obtener el carrito
-    const user = await User(req, res); // Obtener el usuario
+    const _cart = await cart(req, res);
+    const user = await User(req, res); 
 
     if (_cart && _cart.length > 0) {
-      const cartItems = await CartDao.findItems(); // Obtener los items del carrito
+      const cartItems = await CartDao.findItems(); 
       const totalProducts = getTotalProducts(cartItems)
       const totalPrice = getToTalPrice(cartItems)
-      res.render("cart", {
+      res.render("cart.pug", {
         cartItems,
         _cart,
         user,
@@ -70,7 +70,7 @@ export const renderCart = async (req, res) => {
         totalPrice
       });
     } else {
-      res.render("notcart"); // Renderizar la vista cuando no hay un carrito
+      res.render("notcart.pug"); // Renderizar la vista cuando no hay un carrito
     }
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error: error.message });
@@ -110,7 +110,7 @@ export const deleteCart = async (req, res) => {
   }
 };
 
-// Controlador
+
 export const deleteCartItem = async (req, res) => {
   const { id } = req.params;
   console.log(id)
@@ -124,7 +124,7 @@ export const deleteCartItem = async (req, res) => {
 
 
   
-// Controlador
+
 export const updateCartItem = async (req, res) => {
   const { id } = req.params;
   const updatedItemData = req.body;

@@ -11,7 +11,7 @@ export const createOrder = async (req, res) => {
     let productsText = '';
   
     orderItems.forEach((item) => {
-      const productName = item.product.name; // Acceder al nombre del producto
+      const productName = item.product.name; 
       const productQuantity = item.quantity;
   
       // Agregar el producto y cantidad a la cadena de texto
@@ -19,8 +19,8 @@ export const createOrder = async (req, res) => {
     });
   
     const mailOptions = {
-      from: 'action_games_improved@hotmail.com', // Tu dirección de correo electrónico
-      to: order.email, // Dirección de correo electrónico del destinatario
+      from: 'action_games_improved@hotmail.com', 
+      to: order.email, 
       subject: 'Gracias por tu compra!',
       text: `Hola!
       Desde Action Games Improved queremos agradecerte por confiar en nosotros y elegirnos!
@@ -44,14 +44,14 @@ export const createOrder = async (req, res) => {
       }
     });
     
-    res.redirect(`/api/order/${order._id}`); // Redirecciona a la ruta con el ID de la orden
+    res.redirect(`/api/order/${order._id}`); 
   };
   
 
 export const renderOrder = async (req, res) => {
-  const id = req.params.id; // Obtiene el ID de la orden de los parámetros de la URL
-  const order = await OrderRep.findOne(id); // Obtiene la orden utilizando el ID
-  res.render('order', { order: order });
+  const id = req.params.id; 
+  const order = await OrderRep.findOne(id); 
+  res.render('order.pug', { order: order });
 };
 
 
