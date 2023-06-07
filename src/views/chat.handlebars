@@ -1,7 +1,7 @@
 
 <script>
   function outCart() {
-    window.location.href = "/api/products";
+    window.location.href = "/api/productos";
   }
 
 
@@ -18,15 +18,18 @@
     const chatMessages = $("#chat-messages");
     const userList = $("#user-list");
 
-    // Obtén el objeto user desde el servidor
-
+    
     socket.emit("join", "{{userEmail}}");
 
     chatForm.on("submit", e => {
       e.preventDefault();
       const message = chatText.val();
-      socket.emit("send message", message);
-      chatText.val("");
+
+      
+      if (message.trim() !== "") {
+        socket.emit("send message", message);
+        chatText.val("");
+      }
     });
 
     socket.on("new message", function(data) {
@@ -87,7 +90,8 @@
 <div class="container">
   <div class="row">
     <div class="col-md-6 offset-md-3">
-      <h1>Chat en tiempo real con Socket.io y Bootstrap</h1>
+      <h1>Bienvenido al chat!</h1>
+      <h4> Por favor recuerda comportarte. Puedes responder mensajes privados de manera idividual usando el comando /p + nombre de usuario</h4>
       <hr>
       <div class="row">
         <div class="col-md-8">

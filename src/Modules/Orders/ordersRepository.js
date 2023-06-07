@@ -5,8 +5,8 @@ export class OrdersRepository {
         this.ordersDao = ordersDao
     };
 
-    async save() {
-        const order = await this.ordersDao.createOrder()
+    async save({cart, items}) {
+        const order = await this.ordersDao.createOrder(cart, items)
         return order
     }
 

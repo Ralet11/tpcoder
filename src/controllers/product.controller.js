@@ -3,9 +3,9 @@ import axios from "axios";
 import fs from 'fs';
 import { User } from "./users.controller.js";
 
-const ProductRep = new ProductRepository
+const ProductRep = new ProductRepository();
 
-export const getProductById = async (req, res) => {
+export const getProductById = async (req, res, next) => {
   const { id } = req.params;
   try {
     const product = await ProductRep.findOne(id);
@@ -14,35 +14,32 @@ export const getProductById = async (req, res) => {
     }
     res.json({ data: product });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error: error.message });
+    next(error); 
   }
 };
 
-export const getAllProducts = async (req, res) => {
+export const getAllProducts = async (req, res, next) => {
   try {
-    const _user = await User(req, res)
+    const _user = await User(req, res);
     const products = await ProductRep.find();
     res.render('products.pug', { products, _user });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error: error.message });
+    next(error); 
   }
 };
 
-export const getProductsByCat = async (req, res) => {
+export const getProductsByCat = async (req, res, next) => {
   const { categoria } = req.params;
-  console.log(categoria);
   try {
     const _user = await User(req, res);
     const products = await ProductRep.getProductByCategory(categoria);
-    console.log(products, _user);
     res.render("productosCategoria.pug", { products, _user });
   } catch (error) {
-    console.log(error);
+    next(error); 
   }
 };
 
-
-export const createProduct = async (req, res) => {
+export const createProduct = async (req, res, next) => {
   const { name, price, category, image } = req.body;
 
   if (!name || !price || !category || !image) {
@@ -57,7 +54,6 @@ export const createProduct = async (req, res) => {
     }
 
     const newProduct = await ProductRep.save({ name, price, category, image });
-    
 
     // Descargar la imagen desde la URL y guardarla en public/imagenes
     const response = await axios.get(image, { responseType: 'arraybuffer' });
@@ -66,12 +62,11 @@ export const createProduct = async (req, res) => {
 
     res.status(201).json({ data: newProduct, message: "Product has been created" });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error: error.message });
+    next(error); 
   }
 };
 
-
-export const deleteProduct = async (req, res) => {
+export const deleteProduct = async (req, res, next) => {
   const { id } = req.params;
   if (!id) {
     return res.status(400).json({ message: "Bad request", data: null });
@@ -85,12 +80,11 @@ export const deleteProduct = async (req, res) => {
       res.status(404).json({ message: "Product not found" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error: error.message });
+    next(error); 
   }
-
-  
 };
-export const updateProduct = async (req, res) => {
+
+export const updateProduct = async (req, res, next) => {
   const { id } = req.params;
   const { name, price, category } = req.body;
 
@@ -99,7 +93,7 @@ export const updateProduct = async (req, res) => {
   }
 
   try {
-    const existingProduct = await ProductRep.findOne(id);
+    const existingProduct = await ProductRep.findOne({ _id: id });
 
     if (!existingProduct) {
       return res.status(404).json({ message: "Product not found", data: null });
@@ -109,14 +103,13 @@ export const updateProduct = async (req, res) => {
     existingProduct.price = price;
     existingProduct.category = category;
 
-    await existingProduct.save();
+    await ProductRep.save(existingProduct);
     res.json({ data: existingProduct, message: "Product updated successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error: error.message });
+    next(error); 
   }
+};
 
-}
- 
 
 
 

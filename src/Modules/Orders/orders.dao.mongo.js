@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { cart } from "../../controllers/cart.controller.js";
 import { getItems } from "../../controllers/cart.controller.js";
 
 const Schema = mongoose.Schema;
@@ -43,12 +42,8 @@ const OrdersSchema = new Schema({
 const Orders = mongoose.model("Orders", OrdersSchema);
 
 export class OrdersDaoMongo {
-  async createOrder() {
-
-    const _cart = await cart();
-
-    const items = await getItems();
-    console.log(items)
+  async createOrder(_cart, items) {
+    
     const dateTime = _cart[0].dateTime;
     const email = _cart[0].email
     const orderCount = await Orders.countDocuments();

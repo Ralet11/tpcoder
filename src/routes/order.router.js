@@ -4,7 +4,7 @@ import { createOrder, renderOrder } from "../controllers/orders.controller.js";
 
 const ordersRouter = Router();
 
-ordersRouter.get("/order", createOrder)
-ordersRouter.get("/order/:id", renderOrder)
+ordersRouter.get("/order", authenticateToken, createOrder)
+ordersRouter.get("/order/:id", authenticateToken, renderOrder)
 
 export default ordersRouter

@@ -4,7 +4,7 @@ import { authenticateToken } from "../middleware/authenticationJWT.js";
 
 const cartRouter = Router();
 
-cartRouter.get("/carrito/actual", getCart)
+cartRouter.get("/carrito/actual", authenticateToken, getCart)
 cartRouter.get("/carrito", authenticateToken, renderCart);
 cartRouter.post("/carrito", authenticateToken, addProductToCart);
 cartRouter.delete("/carrito", authenticateToken, deleteCart);

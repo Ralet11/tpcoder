@@ -17,8 +17,8 @@ const Chats = mongoose.model("Chats", chatModel);
 
 export class chatDaoMongo {
   async saveChat(name, msg) {
-    const _msg = new Chats({ name, msg }); // Crea una instancia del modelo Chats
-    await _msg.save(); // Guarda el mensaje en la base de datos
+    const _msg = new Chats({ name, msg }); 
+    await _msg.save(); 
   }
 
   async getAllChats() {

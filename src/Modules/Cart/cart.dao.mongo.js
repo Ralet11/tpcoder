@@ -36,20 +36,20 @@ const CartModel = mongoose.model('CartModel', CartsSchema);
 
 export class CartDAOMongo {
 
-  async getCart() {
-    const cart = await CartModel.find();
+  async getCart(email) {
+    const cart = await CartModel.find({email: email});
     if (!cart) {
-      console.log(cart)
-      return null; // Devolver un valor distinto de null para indicar que no se encontró ningún carrito
+      return null;
     } else {
       return cart;
     }
   }
   
-  async getCartItems() {
-    const cart = await CartModel.findOne();
+  async getCartItems(email) {
+    const cart = await CartModel.findOne({ email: email });
     if (!cart) {
-      throw new Error('Cart not found');
+      // Si el carrito no existe, retornar un array vacío
+      return [];
     }
   
     const cartItems = [];
@@ -68,33 +68,34 @@ export class CartDAOMongo {
   }
   
 
-    async addProductToCart(productId, email, dateTime, deliveryAddress) {
-      let cart = await CartModel.findOne();
+  async addProductToCart(productId, email, dateTime, deliveryAddress) {
+    let cart = await CartModel.findOne({email: email});
   
-      if (!cart) {
-        const cartId = new mongoose.Types.ObjectId();
-        cart = new CartModel({
-          _id: cartId,
-          email,
-          dateTime,
-          items: [{ product: productId, quantity: 1 }],
-          deliveryAddress
-        });
+    if (!cart) {
+      const cartId = new mongoose.Types.ObjectId();
+      cart = new CartModel({
+        _id: cartId,
+        email,
+        dateTime,
+        items: [{ product: productId, quantity: 1 }],
+        deliveryAddress
+      });
+    } else {
+      const existingItem = cart.items.find(item => item.product.toString() === productId.toString());
+      if (existingItem) {
+        existingItem.quantity += 1;
       } else {
-        const existingItem = cart.items.find(item => item.product.toString() === productId.toString());
-        if (existingItem) {
-          existingItem.quantity += 1;
-        } else {
-          cart.items.push({ product: productId, quantity: 1 });
-        }
+        cart.items.push({ product: productId, quantity: 1 });
       }
-  
-      await cart.save();
-      return cart;
     }
   
-    async deleteCart() {
-      const result = await CartModel.findOneAndDelete()
+    await cart.save();
+    return cart;
+  }
+  
+  
+    async deleteCart(email) {
+      const result = await CartModel.findOneAndDelete({email: email})
       return result;
     }
 

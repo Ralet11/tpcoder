@@ -7,13 +7,13 @@ export class CartRepository extends CartRepo {
         this.CartDao = CartDao;
       }
 
-      async find(){
-        const cart = await this.CartDao.getCart();
+      async find(email){
+        const cart = await this.CartDao.getCart(email);
         return cart
       }
 
-      async findItems() {
-        const items = await this.CartDao.getCartItems();
+      async findItems(email) {
+        const items = await this.CartDao.getCartItems(email);
         return items
       }
 
@@ -22,19 +22,16 @@ export class CartRepository extends CartRepo {
         return cart
       }
 
-      async delete() {
-        await this.CartDao.deleteCart();
+      async delete(email) {
+        await this.CartDao.deleteCart(email);
         return true;
       }
 
-      // Repositorio
       async deleteCartItem(id) {
         await this.CartDao.deleteCartItem(id);
         return true;
       }
       
-
-      // Repositorio
       async updateCartItem(itemId, updatedItemData) {
         const updatedItem = await this.CartDao.updateCartItem(itemId, updatedItemData);
         return updatedItem;

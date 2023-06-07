@@ -7,10 +7,10 @@ const productsRouter = Router();
 
 productsRouter.get("/", authenticateToken, getAllProducts);
 productsRouter.get("/:categoria", authenticateToken, getProductsByCat)
-productsRouter.get("/filtro/:id", authenticateToken, getProductById);
-productsRouter.post("/", createProduct);
-productsRouter.post("/prod/:id", authenticateToken, deleteProduct)
-productsRouter.post("/updateProduct/:id", updateProduct )
+productsRouter.get("/id/:id", authenticateToken, getProductById);
+productsRouter.post("/", authenticateToken, createProduct);
+productsRouter.post("/:id", authenticateToken, deleteProduct)
+productsRouter.post("/updateProducto/:id", authenticateToken, updateProduct )
 
 
 export default productsRouter

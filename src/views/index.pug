@@ -77,19 +77,19 @@ html
     div.register
       form(action="/api/register", method="POST")
         div
-          label(for="register-username") Username:
+          label(for="register-username") Usuario:
           input(type="text", id="register-username", name="username", required)
         div
           label(for="register-email") Email:
           input(type="text", id="register-email", name="email", required)
         div
-          label(for="register-phone") Phone Number:
+          label(for="register-phone") Telefono:
           input(type="text", id="register-phone", name="phoneNum", required)
         div
-          label(for="register-password") Password:
+          label(for="register-password") Contraseña:
           input(type="password", id="register-password", name="password", required)
         div
-          label(for="register-confirm-password") Confirm Password:
+          label(for="register-confirm-password") Confirme contraseña:
           input(type="password", id="register-confirm-password", name="confirmPassword", required)
         div
           input(type="submit", value="Registrarse")
@@ -99,9 +99,11 @@ html
   script.
     function toggleRegisterForm() {
       const registerForm = document.querySelector('.register');
-      if (registerForm.style.display === 'none') {
+      if (registerForm.style.display === '' || registerForm.style.display === 'none') {
         registerForm.style.display = 'block';
       } else {
         registerForm.style.display = 'none';
       }
     }
+
+

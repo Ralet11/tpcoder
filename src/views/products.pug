@@ -106,17 +106,17 @@ html
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
         z-index: 9999;
         width: 400px;
-        color: black; /* Cambio de color de texto a negro */
+        color: black; 
       }
       form#cart-form-container h2 {
         margin-top: 0;
         font-size: 20px;
-        color: black; /* Cambio de color de texto a negro */
+        color: black; 
       }
       form#cart-form-container label {
         display: block;
         margin-top: 15px;
-        color: black; /* Cambio de color de texto a negro */
+        color: black; 
       }
       form#cart-form-container input {
         width: 100%;
@@ -161,6 +161,20 @@ html
         color: white;
         font-size: 16px;
       }
+      .logout-button {
+        background-color: #ff0000;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-left: 10px;
+        margin-right: 10px;
+      }
+
+      .logout-button:hover {
+        background-color: #cc0000;
+      }
 
   body
     div.nav
@@ -169,11 +183,12 @@ html
         span.logo-text Action Games Improved
       button.cart-button(onclick="goToCart()") Ir al carrito
       button.chat-button(onclick="openChat()") Chatea con nosotros
+      button.logout-button(onclick="logout()") Salir
     h1 Nuestros productos
     h3 
-      a.category-link(href="/api/products/VideoJuegos") VideoJuegos
-      a.category-link(href="/api/products/Consolas") Consolas
-      a.category-link(href="/api/products/Accesorios") Accesorios
+      a.category-link(href="/api/productos/videoJuegos") videoJuegos
+      a.category-link(href="/api/productos/Consolas") Consolas
+      a.category-link(href="/api/productos/Accesorios") Accesorios
 
     ul
       each product in products
@@ -193,6 +208,20 @@ html
       button#submit-btn(type="submit") Agrega al Carrito
 
   script.
+
+    function logout() {
+      fetch('/api/user/logout', {
+        method: 'GET',
+      })
+        .then(response => {
+          if (response.ok) {
+            window.location.href = "/api/";
+          } else {
+            console.log("Error al desloguear");
+          }
+        })
+        .catch(error => console.log(error));
+    }
     const user = !{JSON.stringify(_user)}
 
     function openChat() {
@@ -208,7 +237,7 @@ html
         .then(response => response.json())
         .then(data => {
           if (data) {
-            sendAddToCartRequest(productId); // Llamar a la función para agregar el producto al carrito existente
+            sendAddToCartRequest(productId); 
           } else {
             showCartForm(productId);;
           }
@@ -240,7 +269,7 @@ html
         productId,
         email: user.email,
         deliveryAddress: address,
-        dateTime: new Date().toISOString()  // Agregar el parámetro dateTime con la fecha y hora actual
+        dateTime: new Date().toISOString() 
       };
 
       fetch('/api/carrito', {
@@ -253,7 +282,7 @@ html
         .then(response => response.json())
         .then(data => {
           console.log(data);
-          // Aquí puedes realizar acciones adicionales después de agregar el producto al carrito
+          
           swal({
             title: "¡Excelente!",
             text: "¡Agregaste un producto al carrito!",
